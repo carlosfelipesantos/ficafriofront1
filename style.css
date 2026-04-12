@@ -1,0 +1,1601 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #faf9f9);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding-bottom: 70px;
+    min-height: 100vh;
+}
+
+/* Container principal */
+.main-container {
+    background-color: #f3f3f3;
+    padding: 20px 16px 80px 16px;
+}
+
+/* Header com saudação */
+.welcome-card {
+    background: white;
+    border-radius: 20px;
+    padding: 24px 20px;
+    margin-bottom: 20px;
+}
+
+.welcome-card h1 {
+    margin-left: 15%;
+    margin-right: 15%;
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.date-info {
+    margin-left: 15%;
+    color: #666;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* Cards de estatísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 300px)); /* cada coluna no máximo 300px */
+    justify-content: center; /* centraliza o grid no container */
+    gap: 20px; /* espaço entre cards */
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px 10px;
+    text-align: center;
+    /* remove height e width fixos, deixa o conteúdo definir */
+    border: 1px solid #d4d4d4;
+    transition: transform 0.2s;
+    width: 100%; /* ocupa toda largura da célula do grid */
+    max-width: 300px; /* evita que fique muito largo em telas grandes */
+}
+
+.stat-card:active {
+    transform: scale(0.98);
+}
+
+.stat-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.stat-value.positive {
+    color: #28a745;
+}
+
+.stat-value.negative {
+    color: #dc3545;
+}
+
+/* Cards de serviços pendentes/concluídos */
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.status-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.384);
+}
+
+.status-card h4 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.status-number {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.status-number.pending {
+    color: #ffc107;
+}
+
+.status-number.completed {
+    color: #28a745;
+}
+
+/* Lista de últimos serviços */
+.recent-services {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.section-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.btn-link {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.service-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service-item:last-child {
+    border-bottom: none;
+}
+
+.service-info h4 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+}
+
+.service-info p {
+    font-size: 12px;
+    color: #666;
+    margin: 0;
+}
+
+.service-value {
+    text-align: right;
+}
+
+.service-value .amount {
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.service-value .status {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+/* Botão Novo Serviço */
+.btn-new-service {
+    background: linear-gradient(135deg, #3f60f1 0%, #426eff 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: bold;
+    width: 50%;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    display: block;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: transform 0.2s;
+}
+
+.btn-new-service:active {
+    transform: scale(0.98);
+}
+
+/* Navegação inferior */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 16px 20px;
+    box-shadow: 0 -2px 15px rgba(0,0,0,0.1);
+    border-radius: 20px 20px 0 0;
+    z-index: 1000;
+}
+
+.nav-item {
+    text-align: center;
+    flex: 1;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #999;
+}
+
+.nav-item.active {
+    color: #667eea;
+}
+
+.nav-item i {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.nav-item span {
+    font-size: 12px;
+}
+
+/* Telas */
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+/* Formulário */
+.form-container {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #333;
+}
+
+/* Lista de serviços */
+.services-list {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 500px;
+}
+
+.search-box {
+    margin-bottom: 15px;
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 20px;
+}
+
+/* Cards financeiros */
+.finance-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.finance-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px 15px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+    border: 1px solid #e0e0e0;
+}
+
+.finance-card:active {
+    transform: scale(0.98);
+}
+
+.finance-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.finance-card.revenue .finance-icon {
+    color: #28a745;
+}
+
+.finance-card.expenses .finance-icon {
+    color: #dc3545;
+}
+
+.finance-card.profit .finance-icon {
+    color: #667eea;
+}
+
+.finance-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.finance-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.period-selector h4 {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.financial-details {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.detail-item:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    color: #666;
+    font-size: 14px;
+}
+
+.detail-value {
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.detail-value.completed {
+    color: #28a745;
+}
+
+.detail-value.pending {
+    color: #ffc107;
+}
+
+/* Estilo para tela de clientes */
+.clientes-container {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    min-height: 500px;
+}
+
+.cliente-card {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.cliente-card:active {
+    transform: scale(0.98);
+}
+
+.cliente-card h4 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.cliente-info {
+    font-size: 13px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.cliente-info i {
+    width: 20px;
+    margin-right: 5px;
+    color: #667eea;
+}
+
+.servicos-count {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.btn-add-cliente {
+    background: linear-gradient(135deg, #253db2 0%, #204dc9 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: transform 0.2s;
+}
+
+.btn-add-cliente:active {
+    transform: scale(0.98);
+}
+
+.servico-item-cliente {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-left: 3px solid #667eea;
+}
+
+.photo-upload-area {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: #f9f9f9;
+}
+
+.photo-upload-area:hover {
+    border-color: #667eea;
+    background: #f0f0ff;
+}
+
+.photo-upload-area i {
+    font-size: 48px;
+    color: #667eea;
+    margin-bottom: 10px;
+}
+
+.photo-upload-area p {
+    margin: 0;
+    color: #666;
+}
+
+.photo-upload-area small {
+    color: #999;
+}
+
+/* Botões de status */
+.status-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+    justify-content: flex-start;
+}
+
+.status-option {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: auto;
+}
+
+.status-option i {
+    font-size: 12px;
+}
+
+.status-option.pendente {
+    background: #e4e3e3;
+    color: #555555;
+}
+
+.status-option.pendente.active {
+    background: #ffc107;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+}
+
+.status-option.concluido {
+    background: #e4e3e3;
+    color: #555555;
+}
+
+.status-option.concluido.active {
+    background: #28a745;
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.status-option:active {
+    transform: scale(0.98);
+}
+
+/* Switch base */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 28px;
+    flex: 0 0 50px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ccc;
+    border-radius: 34px;
+    transition: 0.3s;
+}
+
+.slider::before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+    background: #2d56dd;
+}
+
+.switch input:checked + .slider::before {
+    transform: translateX(22px);
+}
+
+/* Garantia e Gastos rows */
+.warranty-row,
+.expense-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 15px;
+}
+
+.warranty-label,
+.expense-label {
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap;
+}
+
+.warranty-date {
+    flex: 1;
+    max-width: 150px;
+    display: none;
+}
+
+/* Container de gastos */
+.expense-container {
+    display: none;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+}
+
+.expense-item {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    align-items: center;
+}
+
+.expense-item input {
+    flex: 1;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.expense-item button {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0 8px;
+    cursor: pointer;
+}
+
+.btn-add-expense {
+    display: none;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px auto;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #28a745;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Container do formulário financeiro */
+#financeForm {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 16px;
+    max-width: 420px;
+    margin: 20px auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#financeForm label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+#financeForm input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    outline: none;
+    transition: 0.2s;
+}
+
+#financeForm input:focus {
+    border-color: #2d56dd;
+    box-shadow: 0 0 0 2px rgba(45,86,221,0.15);
+}
+
+#financeForm button {
+    background: #f1f3f9;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#financeForm button:hover {
+    background: #e4e7f2;
+}
+
+#lucroFinal {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2d56dd;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Estilos específicos da tela Novo Serviço */
+#newServiceScreen .form-control,
+#newServiceScreen .form-select {
+    width: 80% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+#newServiceScreen .btn-new-service,
+#newServiceScreen .btn-secondary {
+    width: 30% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    display: block !important;
+}
+
+#newServiceScreen .status-buttons {
+    justify-content: center !important;
+    width: 100%;
+    max-width: 400px;
+}
+
+#newServiceScreen .mb-3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#newServiceScreen .form-control,
+#newServiceScreen textarea,
+#newServiceScreen input {
+    width: 100%;
+    max-width: 400px;
+}
+
+#newServiceScreen label {
+    width: 100%;
+    max-width: 400px;
+}
+
+#newServiceScreen .status-option {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+/* Botão Adicionar Registro - específico da tela financeiro */
+#financialScreen .btn-new-service {
+    background: linear-gradient(135deg, #2d3de5 0%, #0c42cd 100%) !important;
+    box-shadow: 0 4px 15px rgba(68, 166, 241, 0.4) !important;
+    margin-bottom: 20px !important;
+    font-size: 16px !important;
+    padding: 14px !important;
+}
+
+#financialScreen .btn-new-service:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5) !important;
+}
+
+/* Botão Salvar Registro dentro do formulário */
+#financeForm .btn-primary {
+    background: linear-gradient(135deg, #3f60f1 0%, #426eff 100%);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 15px;
+}
+
+#financeForm .btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Botão Adicionar gasto dentro do financeiro */
+#financeForm .btn-success {
+    background: #3756c6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+#financeForm .btn-success:active {
+    transform: scale(0.98);
+}
+
+
+/* ========== CORREÇÃO DOS BOTÕES DE GASTO ========== */
+
+/* Botão "Adicionar gasto" dentro do formulário financeiro */
+#financeForm .btn-add-gasto {
+    background: #28a745 !important;
+    color: white !important;
+    border: none !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    margin-top: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+}
+
+#financeForm .btn-add-gasto:hover {
+    background: #1e7e34 !important;
+    transform: scale(1.02);
+}
+
+#financeForm .btn-add-gasto:active {
+    transform: scale(0.98);
+}
+
+/* Botão "Remover gasto" (X) */
+.gasto-item button,
+.expense-item button,
+#financeExpenseContainer .expense-item button {
+    background: #dc3545 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    min-width: 32px !important;
+}
+
+.gasto-item button:hover,
+.expense-item button:hover,
+#financeExpenseContainer .expense-item button:hover {
+    background: #c82333 !important;
+    transform: scale(1.02);
+}
+
+.gasto-item button:active,
+.expense-item button:active,
+#financeExpenseContainer .expense-item button:active {
+    transform: scale(0.98);
+}
+
+/* Garantir que os inputs dos gastos tenham fundo branco */
+.gasto-item input,
+.expense-item input,
+#financeExpenseContainer .expense-item input {
+    background: white !important;
+    border: 1px solid #ced4da !important;
+    padding: 8px !important;
+    border-radius: 6px !important;
+}
+
+/* Botão de adicionar gasto no formulário de serviço */
+.btn-add-expense {
+    background: #28a745 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 10px auto !important;
+}
+
+.btn-add-expense:hover {
+    background: #1e7e34 !important;
+}
+
+/* Botão de remover gasto no formulário de serviço */
+.expense-item button {
+    background: #dc3545 !important;
+    color: rgb(161, 23, 23) !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    cursor: pointer !important;
+    font-weight: bold !important;
+}
+
+.expense-item button:hover {
+    background: #f13346 !important;
+}
+
+
+/* Hover do botão Adicionar gasto no financeiro */
+#financeForm .btn-add-gasto:hover,
+#financeForm button[onclick="addFinanceExpense()"]:hover,
+button.btn-add-gasto:hover {
+    background: #14b2dd !important;  /* Verde mais escuro */
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+#financeForm .btn-salvar-registro:hover,
+#financeForm button[onclick="salvarFinanceiro()"]:hover,
+button.btn-salvar-registro:hover {
+   background: #14b2dd !important;  /* Verde mais escuro */
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+}
+
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr; /* uma coluna em celular */
+        justify-items: center; /* centraliza cada card */
+        gap: 15px;
+    }
+    .stat-card {
+        max-width: 280px; /* um pouco menor no celular */
+    }
+}
+
+
+/* Cards financeiros responsivos */
+.finance-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+@media (max-width: 768px) {
+    .finance-cards {
+        grid-template-columns: 1fr; /* uma coluna */
+        justify-items: center; /* centraliza os cards */
+    }
+    .finance-card {
+        width: 100%;
+        max-width: 300px; /* largura máxima para não ficar gigante */
+        margin: 0 auto; /* centraliza */
+    }
+}
+
+
+
+
+/* ========== NOVA TELA FINANCEIRO ========== */
+.finance-wrapper {
+    background: white;
+    border-radius: 28px;
+    padding: 24px 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.finance-header {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.finance-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.finance-subtitle {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Cards modernos */
+.finance-cards-modern {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.finance-card-modern {
+    flex: 1;
+    min-width: 140px;
+    background: white;
+    border-radius: 24px;
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    transition: all 0.2s;
+}
+
+.finance-card-modern:active {
+    transform: scale(0.98);
+}
+
+.finance-card-modern.revenue {
+    border-left: 4px solid #10b981;
+}
+
+.finance-card-modern.expenses {
+    border-left: 4px solid #ef4444;
+}
+
+.finance-card-modern.profit {
+    border-left: 4px solid #3b82f6;
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.finance-card-modern.revenue .card-icon {
+    background: #e8f7ef;
+    color: #10b981;
+}
+
+.finance-card-modern.expenses .card-icon {
+    background: #fee9e6;
+    color: #ef4444;
+}
+
+.finance-card-modern.profit .card-icon {
+    background: #e8edfe;
+    color: #3b82f6;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+.card-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1f2937;
+}
+
+/* Seletor de período */
+.period-container {
+    margin: 24px 0;
+}
+
+.period-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.period-btn-modern {
+    background: #f3f4f6;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.period-btn-modern.active {
+    background: #3b82f6;
+    color: white;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.3);
+}
+
+.period-btn-modern:active {
+    transform: scale(0.96);
+}
+
+/* Botão adicionar registro */
+.add-record-wrapper {
+    margin: 20px 0 16px;
+    text-align: center;
+}
+
+.btn-add-record {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    border: none;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    box-shadow: 0 4px 12px rgba(59,130,246,0.2);
+}
+
+.btn-add-record:active {
+    transform: scale(0.97);
+}
+
+/* Formulário de registro */
+.record-form {
+    background: #f9fafb;
+    border-radius: 24px;
+    padding: 20px;
+    margin: 20px 0;
+}
+
+.form-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #1f2937;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #4b5563;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.modern-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    font-size: 15px;
+    background: white;
+    transition: 0.2s;
+}
+
+.modern-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.expense-list {
+    margin-bottom: 12px;
+}
+
+.expense-item-modern {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.expense-item-modern input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: white;
+}
+
+.expense-item-modern button {
+    background: #ef4444;
+    border: none;
+    color: white;
+    width: 36px;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.btn-add-expense-modern {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    padding: 8px 16px;
+    border-radius: 40px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-add-expense-modern:hover {
+    background: #e5e7eb;
+}
+
+.profit-preview {
+    background: #e8edfe;
+    border-radius: 20px;
+    padding: 12px 16px;
+    text-align: center;
+    margin: 16px 0;
+    font-weight: 500;
+}
+
+.profit-preview span {
+    color: #4b5563;
+}
+
+.profit-preview strong {
+    color: #3b82f6;
+    font-size: 18px;
+    margin-left: 8px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    flex: 1;
+    background: #f3f4f6;
+    border: none;
+    padding: 12px;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-save {
+    flex: 1;
+    background: #10b981;
+    border: none;
+    padding: 12px;
+    border-radius: 40px;
+    font-weight: 600;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+}
+
+/* Detalhes financeiros */
+.financial-details-modern {
+    background: #f9fafb;
+    border-radius: 20px;
+    padding: 16px;
+    margin-top: 20px;
+}
+
+/* Responsivo */
+@media (max-width: 640px) {
+    .finance-cards-modern {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .finance-card-modern {
+        width: 100%;
+    }
+    .period-buttons {
+        gap: 6px;
+    }
+    .period-btn-modern {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+}
+
+
+/* Garantir que o ícone e texto apareçam */
+.servicos-count {
+    display: inline-block;
+    background: #667eea;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.servicos-count i {
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+
+
+/* Botão Novo destacado na navegação */
+.nav-item-new {
+    position: relative;
+    margin-top: -15px;
+}
+
+.new-button-wrapper {
+    background: linear-gradient(135deg, #ffffff 0%, #426eff 100%);
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 5px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.2s;
+}
+
+.new-button-wrapper i {
+    font-size: 28px;
+    color: rgb(71, 106, 244);
+    margin: 0;
+}
+
+.nav-item-new:active .new-button-wrapper {
+    transform: scale(0.95);
+}
+
+.nav-item-new span {
+    display: block;
+    font-size: 11px;
+    color: #323232;
+    margin-top: 5px;
+}
+
+.nav-item-new.active span {
+    color: #667eea;
+}
+
+/* Ajuste dos outros itens da navegação */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    padding: 8px 16px 12px;
+}
+
+.nav-item {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #999;
+    padding: 5px 0;
+}
+
+.nav-item i {
+    font-size: 22px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.nav-item span {
+    font-size: 11px;
+}
+
+.nav-item.active {
+    color: #667eea;
+}
+
+
+/* Efeito hover nos cards clicáveis */
+.stat-card {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.stat-card:active {
+    transform: scale(0.98);
+}
+
+
+/* Lista de faturamento */
+.lista-faturamento-container {
+    margin-top: 30px;
+}
+
+.lista-faturamento {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.lista-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.lista-header h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.total-periodo {
+    font-size: 18px;
+    font-weight: bold;
+    color: #10b981;
+    background: #e8f7ef;
+    padding: 5px 15px;
+    border-radius: 20px;
+}
+
+.lista-itens {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.item-faturamento {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #f9fafb;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.item-faturamento:hover {
+    background: #f0f0ff;
+    transform: translateX(5px);
+}
+
+.item-info {
+    flex: 2;
+}
+
+.item-cliente {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.item-descricao {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.item-data {
+    font-size: 12px;
+    color: #999;
+}
+
+.item-valores {
+    text-align: right;
+    min-width: 150px;
+}
+
+.item-valor {
+    font-weight: bold;
+    color: #10b981;
+    font-size: 16px;
+}
+
+.item-lucro {
+    font-size: 13px;
+    color: #3b82f6;
+    margin-top: 4px;
+}
+
+.lista-vazia {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+}
+
+.lista-vazia i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: #ddd;
+}
+
+@media (max-width: 768px) {
+    .item-faturamento {
+        flex-direction: column;
+        text-align: center;
+    }
+    .item-valores {
+        text-align: center;
+    }
+    .lista-header {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+.totais-periodo {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.total-faturamento {
+    font-size: 14px;
+    font-weight: bold;
+    color: #10b981;
+    background: #e8f7ef;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.total-gastos {
+    font-size: 14px;
+    font-weight: bold;
+    color: #dc3545;
+    background: #fee9e6;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.total-lucro {
+    font-size: 14px;
+    font-weight: bold;
+    color: #3b82f6;
+    background: #e8edfe;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.item-gastos {
+    font-size: 12px;
+    color: #dc3545;
+    margin-top: 2px;
+}
+
+/* Seletor de mês/ano */
+.month-year-selector, .year-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 16px;
+}
+
+.month-select, .year-select {
+    padding: 8px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+.btn-apply-month, .btn-apply-year {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.btn-apply-month:active, .btn-apply-year:active {
+    transform: scale(0.96);
+}

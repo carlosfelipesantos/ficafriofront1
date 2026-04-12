@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>FicaFrio - Sistema de Reparo de Geladeiras</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+       <!-- TELA INÍCIO -->
+<div id="homeScreen" class="screen active">
+    <div class="welcome-card">
+        <div class="welcome-header">
+            <h1>Olá Fábio! 👋</h1>
+        </div>
+        <div class="date-info" id="currentDate"></div>
+    </div>
+    
+    <div class="stats-grid">
+        <div class="stat-card" onclick="irParaFinanceiro()" style="cursor: pointer;">
+            <div class="stat-icon"><img src="Images/moedas.png" alt="Lucro" style="width: 60px;"></div>
+            <div class="stat-label">Lucro Mensal</div>
+            <div class="stat-value positive" id="weekRevenue">R$ 0</div>
+        </div>
+        <div class="stat-card" onclick="irParaServicos()" style="cursor: pointer;">
+            <div class="stat-icon"><img src="Images/geladeira.png" alt="Serviços" style="width: 50px; height: 75px;"></div>
+            <div class="stat-label">Serviços Mensais</div>
+            <div class="stat-value" id="weekExpenses">0</div>
+        </div>
+        <div class="stat-card" onclick="irParaClientes()" style="cursor: pointer;">
+            <div class="stat-icon"><img src="Images/pessoa.png" alt="Clientes" style="width: 70px;"></div>
+            <div class="stat-label">Clientes</div>
+            <div class="stat-value positive" id="weekProfit">0</div>
+        </div>
+    </div>
+
+    <button class="btn-new-service" onclick="abrirNovoServico()">
+        <i class="fas fa-plus"></i> Novo Serviço
+    </button>
+    
+    <div class="recent-services">
+        <div class="section-header">
+            <h3>Últimos Serviços</h3>
+            <a href="#" onclick="verTodosServicos()" class="btn-link">Ver todos →</a>
+        </div>
+        <div id="recentServicesList"></div>
+    </div>
+</div>
+
+        <!-- TELA SERVIÇOS -->
+        <div id="servicesScreen" class="screen">
+            <div class="services-list">
+                <div class="search-box">
+                    <input type="text" id="searchInput" class="form-control" placeholder="🔍 Buscar por nome do cliente...">
+                </div>
+                <div id="allServicesList"></div>
+            </div>
+        </div>
+
+        <!-- TELA CLIENTES -->
+        <div id="clientesScreen" class="screen">
+            <div class="clientes-container">
+                <input type="text" id="searchClienteInput" class="form-control mb-3" placeholder="🔍 Buscar cliente por nome ou telefone...">
+                <button class="btn-add-cliente" onclick="abrirFormCliente()">
+                    <i class="fas fa-user-plus"></i> Novo Cliente
+                </button>
+                <div id="clientesList" class="clientes-list"></div>
+            </div>
+
+            
+        </div>
+
+        <!-- TELA NOVO SERVIÇO -->
+        <div id="newServiceScreen" class="screen">
+            <div class="form-container">
+                <h3 class="mb-3 text-center">Novo Serviço</h3>
+                <form id="serviceForm">
+                    <!-- Seleção de cliente existente -->
+<div class="mb-3">
+    <label class="form-label">Selecionar Cliente Existente</label>
+    <div style="display: flex; gap: 8px;">
+        <select id="selectCliente" class="form-control" style="flex: 1;">
+            <option value="">-- Selecione um cliente --</option>
+        </select>
+        <button type="button" class="btn btn-outline-primary" onclick="carregarClienteSelecionado()" style="white-space: nowrap;">
+            <i class="fas fa-user-check"></i> Carregar
+        </button>
+    </div>
+    <small class="text-muted">Ou preencha os campos abaixo para um novo cliente</small>
+</div> 
+                    <div id="clienteFields">
+                    <div class="mb-3">
+                        <label class="form-label">Nome do Cliente</label>
+                        <input type="text" id="clientName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefone</label>
+                        <input type="tel" id="phone" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Endereço</label>
+                        <input type="text" id="address" class="form-control" required>
+                    </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descrição do Serviço</label>
+                        <textarea id="problemDesc" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Valor Cobrado (R$)</label>
+                        <input type="number" id="amount" class="form-control" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Data do Serviço</label>
+                        <input type="date" id="serviceDate" class="form-control" required>
+                    </div>
+
+                    <!-- Status -->
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <div class="status-buttons">
+                            <button type="button" class="status-option pendente" id="statusPendente" onclick="setStatus('Pendente')">
+                                <i class="fas fa-clock"></i> Pendente
+                            </button>
+                            <button type="button" class="status-option concluido" id="statusConcluido" onclick="setStatus('Completo')">
+                                <i class="fas fa-check-circle"></i> Concluído
+                            </button>
+                        </div>
+                        <input type="hidden" id="status" value="Pendente">
+                    </div>
+
+                    <!-- Garantia -->
+                    <div class="warranty-row">
+                        <span class="warranty-label">Tem garantia?</span>
+                        <label class="switch">
+                            <input type="checkbox" id="hasWarranty" onchange="toggleWarranty()">
+                            <span class="slider"></span>
+                        </label>
+                        <input type="date" id="warrantyEnd" class="form-control warranty-date">
+                    </div>
+
+                    <!-- Gastos -->
+                    <div class="expense-row">
+                        <span class="expense-label">Teve gastos?</span>
+                        <label class="switch">
+                            <input type="checkbox" id="hasExpense" onchange="toggleExpense()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div id="expenseContainer" class="expense-container"></div>
+                    <button type="button" id="addExpenseBtn" class="btn-add-expense" onclick="addExpense()">
+                        + Adicionar gasto
+                    </button>
+
+                    <!-- Foto -->
+                    <div class="mb-3">
+                        <label class="form-label">Foto do Serviço</label>
+                        <div class="photo-upload-area" onclick="document.getElementById('servicePhoto').click()">
+                            <i class="fas fa-camera"></i>
+                            <p>Tirar foto ou selecionar imagem</p>
+                            <small>Clique para adicionar foto</small>
+                        </div>
+                        <input type="file" id="servicePhoto" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto(this)">
+                        <div id="photoPreview" style="display:none; margin-top: 10px;">
+                            <img id="photoPreviewImg" style="width: 100%; border-radius: 10px;">
+                            <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removerFoto()">Remover foto</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-new-service">Salvar Serviço</button>
+                    <button type="button" class="btn btn-secondary w-100 mt-2" onclick="voltarInicio()">Cancelar</button>
+                </form>
+            </div>
+        </div>
+
+ <!-- TELA FINANCEIRO - VERSÃO SIMPLIFICADA -->
+<div id="financialScreen" class="screen">
+    <div class="finance-wrapper">
+        <div class="finance-header">
+            <h3 class="finance-title">Resumo Financeiro</h3>
+            <p class="finance-subtitle">Acompanhe seus ganhos, gastos e lucros de forma clara</p>
+        </div>
+
+        <!-- Cards principais com design moderno -->
+        <div class="finance-cards-modern">
+            <div class="finance-card-modern revenue">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Faturamento</span>
+                    <span class="card-value" id="financeRevenue">R$ 0,00</span>
+                </div>
+            </div>
+            <div class="finance-card-modern expenses">
+                <div class="card-icon">
+                    <i class="fas fa-receipt"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Gastos</span>
+                    <span class="card-value" id="financeExpenses">R$ 0,00</span>
+                </div>
+            </div>
+            <div class="finance-card-modern profit">
+                <div class="card-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Lucro Líquido</span>
+                    <span class="card-value" id="financeProfit">R$ 0,00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seletor de período estilizado -->
+<div class="period-container">
+    <div class="period-buttons">
+        <button class="period-btn-modern" data-period="daily">Hoje</button>
+        <button class="period-btn-modern" data-period="weekly">Semana</button>
+        <button class="period-btn-modern" data-period="monthly">Mês</button>
+        <button class="period-btn-modern" data-period="yearly">Ano</button>
+    </div>
+    
+    <!-- Seletor de mês/ano (aparece apenas quando Mês ou Ano estiver selecionado) -->
+    <div class="month-year-selector" id="monthYearSelector" style="display: none;">
+        <select id="monthSelect" class="month-select">
+            <option value="0">Janeiro</option>
+            <option value="1">Fevereiro</option>
+            <option value="2">Março</option>
+            <option value="3">Abril</option>
+            <option value="4">Maio</option>
+            <option value="5">Junho</option>
+            <option value="6">Julho</option>
+            <option value="7">Agosto</option>
+            <option value="8">Setembro</option>
+            <option value="9">Outubro</option>
+            <option value="10">Novembro</option>
+            <option value="11">Dezembro</option>
+        </select>
+        <select id="yearSelect" class="year-select">
+            <!-- Anos serão preenchidos via JS -->
+        </select>
+        <button class="btn-apply-month" onclick="aplicarFiltroMes()">Aplicar</button>
+    </div>
+    
+    <!-- Seletor de ano (apenas para Ano) -->
+    <div class="year-selector" id="yearSelector" style="display: none;">
+        <select id="yearOnlySelect" class="year-select">
+            <!-- Anos serão preenchidos via JS -->
+        </select>
+        <button class="btn-apply-year" onclick="aplicarFiltroAno()">Aplicar</button>
+    </div>
+</div>
+        <!-- Detalhes extras -->
+        <div id="financialDetails" class="financial-details-modern">
+            <!-- Os detalhes serão preenchidos via JS -->
+        </div>
+
+        <!-- Lista de serviços do período -->
+        <div id="listaFaturamentoContainer" class="lista-faturamento-container">
+            <!-- Os serviços serão carregados via JS -->
+        </div>
+    </div>
+</div>
+
+    <!-- Navegação Inferior -->
+<div class="bottom-nav">
+    <div class="nav-item" data-screen="home">
+        <i class="fas fa-home"></i>
+        <span>Início</span>
+    </div>
+    <div class="nav-item" data-screen="clientes">
+        <i class="fas fa-users"></i>
+        <span>Clientes</span>
+    </div>
+    
+    <!-- Botão Novo destacado no centro -->
+    <div class="nav-item nav-item-new" data-screen="new">
+        <div class="new-button-wrapper">
+            <i class="fas fa-plus-circle"></i>
+        </div>
+        <span>Novo</span>
+    </div>
+    
+    <div class="nav-item" data-screen="services">
+        <i class="fas fa-list"></i>
+        <span>Serviços</span>
+    </div>
+    <div class="nav-item" data-screen="financial">
+        <i class="fas fa-chart-line"></i>
+        <span>Financeiro</span>
+    </div>
+</div>
+
+    <!-- Modais -->
+   <div class="modal fade" id="serviceModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes do Serviço</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="clienteModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clienteModalTitle">Novo Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="clienteForm">
+                        <input type="hidden" id="clienteId">
+                        <div class="mb-3">
+                            <label class="form-label">Nome</label>
+                            <input type="text" id="clienteNome" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" id="clienteTelefone" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Endereço</label>
+                            <input type="text" id="clienteEndereco" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Salvar Cliente</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="clienteDetalhesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes do Cliente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="clienteDetalhesBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

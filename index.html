@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>FicaFrio - Sistema de Reparo de Geladeiras</title>
+   <title>FicaFrio - Gestão de Serviços</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#2563eb">
 </head>
 <body>
     <div class="main-container">
@@ -15,36 +16,58 @@
     <div class="welcome-card">
         <div class="welcome-header">
             <h1>Olá Fábio! 👋</h1>
+            <p>Sistema de serviços da FicaFrio</p>
         </div>
         <div class="date-info" id="currentDate"></div>
     </div>
-    
-    <div class="stats-grid">
-        <div class="stat-card" onclick="irParaFinanceiro()" style="cursor: pointer;">
-            <div class="stat-icon"><img src="Images/moedas.png" alt="Lucro" style="width: 60px;"></div>
-            <div class="stat-label">Lucro Mensal</div>
+
+    <div class="quick-actions">
+        <button class="quick-btn primary" onclick="abrirNovoServico()">
+            <i class="fas fa-plus-circle"></i>
+            <div>
+                <strong>Novo Serviço</strong>
+                <span>Cadastrar conserto</span>
+            </div>
+        </button>
+
+        <button class="quick-btn" onclick="irParaClientes()">
+            <i class="fas fa-users"></i>
+            <div>
+                <strong>Clientes</strong>
+                <span>Ver e cadastrar clientes</span>
+            </div>
+        </button>
+
+        <button class="quick-btn" onclick="irParaFinanceiro()">
+            <i class="fas fa-chart-line"></i>
+            <div>
+                <strong>Financeiro</strong>
+                <span>Ver lucro e gastos</span>
+            </div>
+        </button>
+    </div>
+
+    <div class="stats-grid simple">
+        <div class="stat-card" onclick="irParaFinanceiro()">
+            <div class="stat-label">Lucro do mês</div>
             <div class="stat-value positive" id="weekRevenue">R$ 0</div>
         </div>
-        <div class="stat-card" onclick="irParaServicos()" style="cursor: pointer;">
-            <div class="stat-icon"><img src="Images/geladeira.png" alt="Serviços" style="width: 50px; height: 75px;"></div>
-            <div class="stat-label">Serviços Mensais</div>
+
+        <div class="stat-card" onclick="irParaServicos()">
+            <div class="stat-label">Serviços</div>
             <div class="stat-value" id="weekExpenses">0</div>
         </div>
-        <div class="stat-card" onclick="irParaClientes()" style="cursor: pointer;">
-            <div class="stat-icon"><img src="Images/pessoa.png" alt="Clientes" style="width: 70px;"></div>
+
+        <div class="stat-card" onclick="irParaClientes()">
             <div class="stat-label">Clientes</div>
             <div class="stat-value positive" id="weekProfit">0</div>
         </div>
     </div>
 
-    <button class="btn-new-service" onclick="abrirNovoServico()">
-        <i class="fas fa-plus"></i> Novo Serviço
-    </button>
-    
     <div class="recent-services">
         <div class="section-header">
             <h3>Últimos Serviços</h3>
-            <a href="#" onclick="verTodosServicos()" class="btn-link">Ver todos →</a>
+            <a href="#" onclick="verTodosServicos()" class="btn-link">Ver todos</a>
         </div>
         <div id="recentServicesList"></div>
     </div>
@@ -178,91 +201,36 @@
 
  <!-- TELA FINANCEIRO - VERSÃO SIMPLIFICADA -->
 <div id="financialScreen" class="screen">
-    <div class="finance-wrapper">
-        <div class="finance-header">
-            <h3 class="finance-title">Resumo Financeiro</h3>
-            <p class="finance-subtitle">Acompanhe seus ganhos, gastos e lucros de forma clara</p>
+    <div class="finance-wrapper simple-finance">
+        <h3 class="finance-title">Financeiro</h3>
+        <p class="finance-subtitle">Resumo simples dos ganhos</p>
+
+        <div class="big-profit-card">
+            <span>Lucro líquido</span>
+            <strong id="financeProfit">R$ 0,00</strong>
         </div>
 
-        <!-- Cards principais com design moderno -->
-        <div class="finance-cards-modern">
-            <div class="finance-card-modern revenue">
-                <div class="card-icon">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="card-content">
-                    <span class="card-label">Faturamento</span>
-                    <span class="card-value" id="financeRevenue">R$ 0,00</span>
-                </div>
+        <div class="money-row">
+            <div>
+                <span>Faturamento</span>
+                <strong id="financeRevenue">R$ 0,00</strong>
             </div>
-            <div class="finance-card-modern expenses">
-                <div class="card-icon">
-                    <i class="fas fa-receipt"></i>
-                </div>
-                <div class="card-content">
-                    <span class="card-label">Gastos</span>
-                    <span class="card-value" id="financeExpenses">R$ 0,00</span>
-                </div>
-            </div>
-            <div class="finance-card-modern profit">
-                <div class="card-icon">
-                    <i class="fas fa-coins"></i>
-                </div>
-                <div class="card-content">
-                    <span class="card-label">Lucro Líquido</span>
-                    <span class="card-value" id="financeProfit">R$ 0,00</span>
-                </div>
+            <div>
+                <span>Gastos</span>
+                <strong id="financeExpenses">R$ 0,00</strong>
             </div>
         </div>
 
-        <!-- Seletor de período estilizado -->
-<div class="period-container">
-    <div class="period-buttons">
-        <button class="period-btn-modern" data-period="daily">Hoje</button>
-        <button class="period-btn-modern" data-period="weekly">Semana</button>
-        <button class="period-btn-modern" data-period="monthly">Mês</button>
-        <button class="period-btn-modern" data-period="yearly">Ano</button>
-    </div>
-    
-    <!-- Seletor de mês/ano (aparece apenas quando Mês ou Ano estiver selecionado) -->
-    <div class="month-year-selector" id="monthYearSelector" style="display: none;">
-        <select id="monthSelect" class="month-select">
-            <option value="0">Janeiro</option>
-            <option value="1">Fevereiro</option>
-            <option value="2">Março</option>
-            <option value="3">Abril</option>
-            <option value="4">Maio</option>
-            <option value="5">Junho</option>
-            <option value="6">Julho</option>
-            <option value="7">Agosto</option>
-            <option value="8">Setembro</option>
-            <option value="9">Outubro</option>
-            <option value="10">Novembro</option>
-            <option value="11">Dezembro</option>
-        </select>
-        <select id="yearSelect" class="year-select">
-            <!-- Anos serão preenchidos via JS -->
-        </select>
-        <button class="btn-apply-month" onclick="aplicarFiltroMes()">Aplicar</button>
-    </div>
-    
-    <!-- Seletor de ano (apenas para Ano) -->
-    <div class="year-selector" id="yearSelector" style="display: none;">
-        <select id="yearOnlySelect" class="year-select">
-            <!-- Anos serão preenchidos via JS -->
-        </select>
-        <button class="btn-apply-year" onclick="aplicarFiltroAno()">Aplicar</button>
-    </div>
-</div>
-        <!-- Detalhes extras -->
-        <div id="financialDetails" class="financial-details-modern">
-            <!-- Os detalhes serão preenchidos via JS -->
+        <div class="period-buttons simple-period">
+            <button class="period-btn-modern" data-period="daily">Hoje</button>
+            <button class="period-btn-modern" data-period="weekly">Semana</button>
+            <button class="period-btn-modern" data-period="monthly">Mês</button>
+            <button class="period-btn-modern" data-period="yearly">Ano</button>
         </div>
 
-        <!-- Lista de serviços do período -->
-        <div id="listaFaturamentoContainer" class="lista-faturamento-container">
-            <!-- Os serviços serão carregados via JS -->
-        </div>
+        <div id="financialDetails" class="financial-details-modern"></div>
+
+        <div id="listaFaturamentoContainer" class="lista-faturamento-container"></div>
     </div>
 </div>
 

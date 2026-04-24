@@ -144,28 +144,17 @@ function setupEventListeners() {
 // Mostrar/esconder seletores conforme o período
 // Dentro de setupEventListeners, configure os botões de período
 const periodBtns = document.querySelectorAll('.period-btn-modern');
+
 periodBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         const period = btn.dataset.period;
-        
-        // Mostrar/esconder seletores conforme o período
-        const monthYearSelector = document.getElementById('monthYearSelector');
-        const yearSelector = document.getElementById('yearSelector');
-        
-        if (period === 'monthly') {
-            monthYearSelector.style.display = 'flex';
-            yearSelector.style.display = 'none';
-            popularAnos();
-        } else if (period === 'yearly') {
-            monthYearSelector.style.display = 'none';
-            yearSelector.style.display = 'flex';
-            popularAnos();
-        } else {
-            monthYearSelector.style.display = 'none';
-            yearSelector.style.display = 'none';
-        }
-        
-        //  CARREGAR O RELATÓRIO DO PERÍODO SELECIONADO
+
+        document.querySelectorAll('.period-btn-modern').forEach(b => {
+            b.classList.remove('active');
+        });
+
+        btn.classList.add('active');
+
         loadFinancialReport(period);
     });
 });

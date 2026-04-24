@@ -1,4 +1,4 @@
-const API_URL = 'https://ficafrio-api-ebd4b2adgbbjandm.canadacentral-01.azurewebsites.net/api';
+const API_URL = 'https://ficafrio-api.onrender.com/api';
 
 let services = [];
 let clientes = [];

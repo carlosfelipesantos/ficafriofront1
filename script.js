@@ -469,89 +469,141 @@ if (gastos.length > 0) {
 
 // Exibir detalhes do serviço
 async function showServiceDetails(id) {
-    console.log('Abrindo detalhes do serviço ID:', id);  //  Verificar se o ID vem correto
-    
+    console.log('Abrindo detalhes do serviço ID:', id);
+
     try {
         const [serviceRes, gastosRes] = await Promise.all([
             fetch(`${API_URL}/Services/${id}`),
             fetch(`${API_URL}/Gastos/service/${id}`)
         ]);
+
         const service = await serviceRes.json();
         const gastosLista = await gastosRes.json();
-        
-        console.log('Serviço carregado, ID:', service.id);  //  Verificar ID do serviço
-        
-        const totalGastos = gastosLista.reduce((sum, g) => sum + g.valor, 0);
+
+        const retornos = gastosLista.filter(g => g.tipoDeGasto === 'Retorno');
+        const gastosComuns = gastosLista.filter(g => g.tipoDeGasto !== 'Retorno');
+
+        const totalGastosComuns = gastosComuns.reduce((sum, g) => sum + g.valor, 0);
+        const totalRetornos = retornos.reduce((sum, g) => sum + g.valor, 0);
+        const totalGastos = totalGastosComuns + totalRetornos;
         const lucroReal = service.valor - totalGastos;
-        
+
         const modalBody = document.getElementById('modalBody');
+
         modalBody.innerHTML = `
-            <h6>📋 Informações do Cliente</h6>
-            <p><strong>Nome:</strong> ${service.nomeCliente}<br>
-            <strong>Telefone:</strong> ${service.telefoneCliente}<br>
-            <strong>Endereço:</strong> ${service.endereco}</p>
-            
-            <h6>🔧 Detalhes do Serviço</h6>
-            <p><strong>Problema:</strong> ${service.descricaoServico}<br>
-            <strong>Valor:</strong> ${formatCurrency(service.valor)}<br>
-            <strong>Data:</strong> ${new Date(service.dataServico).toLocaleDateString()}<br>
-            <strong>Status:</strong> ${getStatusText(service.status)}</p>
-            
+            <div class="modal-section">
+                <h5>${service.nomeCliente}</h5>
+                <p>📞 ${service.telefoneCliente}</p>
+                <p>📍 ${service.endereco}</p>
+            </div>
+
+            <div class="modal-section">
+                <h6>🔧 Serviço</h6>
+                <p>${service.descricaoServico}</p>
+
+                <div class="modal-info-grid">
+                    <div>
+                        <span>Valor</span>
+                        <strong>${formatCurrency(service.valor)}</strong>
+                    </div>
+                    <div>
+                        <span>Data</span>
+                        <strong>${new Date(service.dataServico).toLocaleDateString()}</strong>
+                    </div>
+                    <div>
+                        <span>Status</span>
+                        <strong>${getStatusText(service.status)}</strong>
+                    </div>
+                </div>
+            </div>
+
             ${service.fotoServico ? `
-            <h6>📸 Foto do Serviço</h6>
-            <img src="${service.fotoServico}" style="width: 100%; border-radius: 10px; margin-bottom: 10px;">
+                <div class="modal-section">
+                    <h6>📸 Foto</h6>
+                    <img src="${service.fotoServico}" style="width:100%;border-radius:16px;margin-top:8px;">
+                </div>
             ` : ''}
 
-            <h6>💰 Gastos do Serviço</h6>
-            ${gastosLista.length ? gastosLista.map(g => `
-                <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #eee;">
-                    <span>${g.descricacao}</span>
-                    <span style="color:#dc3545;">${formatCurrency(g.valor)}</span>
+            <div class="modal-section">
+                <h6>💰 Gastos</h6>
+
+                ${gastosComuns.length ? gastosComuns.map(g => `
+                    <div class="modal-line">
+                        <span>${g.descricacao}</span>
+                        <strong class="text-danger">${formatCurrency(g.valor)}</strong>
+                    </div>
+                `).join('') : '<p class="text-muted">Nenhum gasto comum registrado.</p>'}
+            </div>
+
+            ${retornos.length ? `
+                <div class="modal-section retorno-box">
+                    <h6>🔁 Retornos / Garantia</h6>
+
+                    ${retornos.map(r => `
+                        <div class="retorno-item">
+                            <strong>Retorno em ${new Date(r.dataGasto).toLocaleDateString()}</strong>
+                            <p>${r.descricacao}</p>
+                            <span>Prejuízo: ${formatCurrency(r.valor)}</span>
+                        </div>
+                    `).join('')}
                 </div>
-            `).join('') : '<p>Nenhum gasto registrado</p>'}
-            <div style="margin-top:10px;padding-top:10px;border-top:2px solid #ddd;font-weight:bold;">
-                <div style="display:flex;justify-content:space-between;">
-                    <span>Total de gastos:</span>
-                    <span style="color:#dc3545;">${formatCurrency(totalGastos)}</span>
+            ` : ''}
+
+            <div class="modal-section resumo-box">
+                <div class="modal-line">
+                    <span>Total de gastos</span>
+                    <strong class="text-danger">${formatCurrency(totalGastos)}</strong>
                 </div>
-                <div style="display:flex;justify-content:space-between;margin-top:5px;">
-                    <span>💰 Lucro real:</span>
-                    <span style="color:${lucroReal >= 0 ? '#28a745' : '#dc3545'};">${formatCurrency(lucroReal)}</span>
+
+                ${totalRetornos > 0 ? `
+                    <div class="modal-line">
+                        <span>Total em retornos</span>
+                        <strong style="color:#f97316;">${formatCurrency(totalRetornos)}</strong>
+                    </div>
+                ` : ''}
+
+                <div class="modal-line">
+                    <span>Lucro real</span>
+                    <strong style="color:${lucroReal >= 0 ? '#16a34a' : '#dc2626'};">
+                        ${formatCurrency(lucroReal)}
+                    </strong>
                 </div>
             </div>
-            
+
             ${service.temGarantia ? `
-            <h6>🛡️ Garantia</h6>
-            <p><strong>Início:</strong> ${new Date(service.dataServico).toLocaleDateString()}<br>
-            <strong>Fim:</strong> ${service.fimGarantia ? new Date(service.fimGarantia).toLocaleDateString() : '-'}<br>
-            <strong>Status:</strong> ${isInWarranty(service) ? '✅ Dentro da garantia' : '⚠️ Garantia expirada'}</p>
-            ` : '<p>❌ Sem garantia</p>'}
-            
-            <hr>
-            <div class="d-grid gap-2">
-                <button class="btn btn-danger" onclick="deletarServico(${service.id})">🗑️ Excluir Serviço</button>
+                <div class="modal-section">
+                    <h6>🛡️ Garantia</h6>
+                    <p>Fim: ${service.fimGarantia ? new Date(service.fimGarantia).toLocaleDateString() : '-'}</p>
+                    <p>${isInWarranty(service) ? '✅ Dentro da garantia' : '⚠️ Garantia expirada'}</p>
+                </div>
+            ` : ''}
+
+            <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-warning" onclick="abrirModalRetorno(${service.id})">
+                    🔁 Registrar Retorno
+                </button>
+
+                <button class="btn btn-danger" onclick="deletarServico(${service.id})">
+                    🗑️ Excluir Serviço
+                </button>
             </div>
         `;
-        
+
         const modalElement = document.getElementById('serviceModal');
         const modal = new bootstrap.Modal(modalElement);
-        
+
         const existingBackdrop = document.querySelector('.modal-backdrop');
-        if (existingBackdrop) {
-            existingBackdrop.remove();
-        }
+        if (existingBackdrop) existingBackdrop.remove();
+
         document.body.classList.remove('modal-open');
-        
         modal.show();
-        
-        modalElement.addEventListener('hidden.bs.modal', function() {
+
+        modalElement.addEventListener('hidden.bs.modal', function () {
             const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
-            }
+            if (backdrop) backdrop.remove();
             document.body.classList.remove('modal-open');
-        }, { once: true });  //  Adiciona { once: true } para executar apenas uma vez
-        
+        }, { once: true });
+
     } catch (error) {
         console.error('Erro ao carregar detalhes:', error);
     }
@@ -1439,3 +1491,127 @@ function exibirListaServicosFaturamentoPersonalizada(servicos, tituloPeriodo, to
     
     container.innerHTML = html;
 }
+
+function abrirRetorno() {
+    const modalBody = document.getElementById('retornoClienteBody');
+
+    if (!clientes.length) {
+        modalBody.innerHTML = `
+            <div class="lista-vazia">
+                <p>Nenhum cliente cadastrado.</p>
+            </div>
+        `;
+    } else {
+        modalBody.innerHTML = clientes.map(cliente => `
+            <div class="cliente-card" onclick="selecionarClienteRetorno(${cliente.id})">
+                <h4>${cliente.nome}</h4>
+                <div class="cliente-info">📞 ${cliente.telefone}</div>
+                <div class="cliente-info">📍 ${cliente.endereco}</div>
+            </div>
+        `).join('');
+    }
+
+    new bootstrap.Modal(document.getElementById('retornoClienteModal')).show();
+}
+
+function abrirModalRetorno(serviceId) {
+    const modalServico = bootstrap.Modal.getInstance(document.getElementById('retornoServicoModal'));
+    if (modalServico) modalServico.hide();
+
+    document.getElementById('retornoServiceId').value = serviceId;
+    document.getElementById('retornoMotivo').value = '';
+    document.getElementById('retornoSolucao').value = '';
+    document.getElementById('retornoValorGasto').value = 0;
+    document.getElementById('retornoData').value = new Date().toISOString().split('T')[0];
+
+    new bootstrap.Modal(document.getElementById('retornoModal')).show();
+}
+
+async function salvarRetorno() {
+    const serviceId = parseInt(document.getElementById('retornoServiceId').value);
+    const motivo = document.getElementById('retornoMotivo').value;
+    const solucao = document.getElementById('retornoSolucao').value;
+    const valorGasto = parseFloat(document.getElementById('retornoValorGasto').value || 0);
+    const dataRetorno = document.getElementById('retornoData').value;
+
+    if (!serviceId || !motivo) {
+        console.error('Preencha o motivo do retorno.');
+        return;
+    }
+
+    const descricaoCompleta = `Motivo: ${motivo}${solucao ? ' | Solução: ' + solucao : ''}`;
+
+    const retorno = {
+        serviceId: serviceId,
+        tipoDeGasto: "Retorno",
+        descricacao: descricaoCompleta,
+        valor: isNaN(valorGasto) ? 0 : valorGasto,
+        dataGasto: dataRetorno ? new Date(dataRetorno).toISOString() : new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch(`${API_URL}/Gastos`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(retorno)
+        });
+
+        if (!response.ok) {
+            const erro = await response.text();
+            console.error('Erro ao salvar retorno:', erro);
+            return;
+        }
+
+        const modalRetorno = bootstrap.Modal.getInstance(document.getElementById('retornoModal'));
+        if (modalRetorno) modalRetorno.hide();
+
+        await loadServices();
+        await showServiceDetails(serviceId);
+
+    } catch (error) {
+        console.error('Erro de conexão ao salvar retorno:', error);
+    }
+}
+
+async function selecionarClienteRetorno(clienteId) {
+    const modalCliente = bootstrap.Modal.getInstance(document.getElementById('retornoClienteModal'));
+    if (modalCliente) modalCliente.hide();
+
+    const cliente = clientes.find(c => c.id === clienteId);
+
+    const servicosCliente = services.filter(s => s.clienteId === clienteId);
+
+    const modalBody = document.getElementById('retornoServicoBody');
+
+    if (!servicosCliente.length) {
+        modalBody.innerHTML = `
+            <div class="lista-vazia">
+                <h4>${cliente?.nome || 'Cliente'}</h4>
+                <p>Esse cliente ainda não tem serviços cadastrados.</p>
+            </div>
+        `;
+    } else {
+        modalBody.innerHTML = `
+            <h5 style="font-weight:900;margin-bottom:12px;">${cliente?.nome || 'Cliente'}</h5>
+            ${servicosCliente.map(service => `
+                <div class="service-item" onclick="abrirModalRetorno(${service.id})">
+                    <div class="service-info">
+                        <h4>${service.descricaoServico}</h4>
+                        <p>📅 ${new Date(service.dataServico).toLocaleDateString()}</p>
+                        <p>📍 ${service.endereco}</p>
+                    </div>
+                    <div class="service-value">
+                        <div class="amount">${formatCurrency(service.valor)}</div>
+                        <div class="status" style="background:${getStatusColor(service.status)};color:white;">
+                            ${getStatusText(service.status)}
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        `;
+    }
+
+    new bootstrap.Modal(document.getElementById('retornoServicoModal')).show();
+}
+
+

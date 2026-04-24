@@ -3,82 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-   <title>FicaFrio - Gestão de Serviços</title>
+    <title>FicaFrio - Gestão de Serviços</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <meta name="theme-color" content="#2563eb">
 </head>
+
 <body>
     <div class="main-container">
-       <!-- TELA INÍCIO -->
-<div id="homeScreen" class="screen active">
-    <div class="welcome-card">
-        <div class="welcome-header">
-            <h1>Olá Fábio! 👋</h1>
-            <p>Sistema de serviços da FicaFrio</p>
-        </div>
-        <div class="date-info" id="currentDate"></div>
-    </div>
 
-    <div class="quick-actions">
-        <button class="quick-btn primary" onclick="abrirNovoServico()">
-            <i class="fas fa-plus-circle"></i>
-            <div>
-                <strong>Novo Serviço</strong>
-                <span>Cadastrar conserto</span>
+        <!-- TELA INÍCIO -->
+        <div id="homeScreen" class="screen active">
+            <div class="welcome-card">
+                <div class="welcome-header">
+                    <h1>Olá Fábio! 👋</h1>
+                    <p>Sistema de serviços da FicaFrio</p>
+                </div>
+                <div class="date-info" id="currentDate"></div>
             </div>
-        </button>
 
-        <button class="quick-btn" onclick="irParaClientes()">
-            <i class="fas fa-users"></i>
-            <div>
-                <strong>Clientes</strong>
-                <span>Ver e cadastrar clientes</span>
+            <div class="quick-actions">
+                <button class="quick-btn primary" onclick="abrirNovoServico()">
+                    <i class="fas fa-plus-circle"></i>
+                    <div>
+                        <strong>Novo Serviço</strong>
+                        <span>Cadastrar conserto</span>
+                    </div>
+                </button>
+
+                <button class="quick-btn warning" onclick="abrirRetorno()">
+                    <i class="fas fa-rotate-left"></i>
+                    <div>
+                        <strong>Adicionar Retorno</strong>
+                        <span>Garantia ou problema que voltou</span>
+                    </div>
+                </button>
+
+                <button class="quick-btn" onclick="irParaClientes()">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <strong>Clientes</strong>
+                        <span>Ver e cadastrar clientes</span>
+                    </div>
+                </button>
+
+                <button class="quick-btn" onclick="irParaFinanceiro()">
+                    <i class="fas fa-chart-line"></i>
+                    <div>
+                        <strong>Financeiro</strong>
+                        <span>Ver lucro e gastos</span>
+                    </div>
+                </button>
             </div>
-        </button>
 
-        <button class="quick-btn" onclick="irParaFinanceiro()">
-            <i class="fas fa-chart-line"></i>
-            <div>
-                <strong>Financeiro</strong>
-                <span>Ver lucro e gastos</span>
+            <div class="stats-grid simple">
+                <div class="stat-card" onclick="irParaFinanceiro()">
+                    <div class="stat-label">Lucro do mês</div>
+                    <div class="stat-value positive" id="weekRevenue">R$ 0</div>
+                </div>
+
+                <div class="stat-card" onclick="irParaServicos()">
+                    <div class="stat-label">Serviços</div>
+                    <div class="stat-value" id="weekExpenses">0</div>
+                </div>
+
+                <div class="stat-card" onclick="irParaClientes()">
+                    <div class="stat-label">Clientes</div>
+                    <div class="stat-value positive" id="weekProfit">0</div>
+                </div>
             </div>
-        </button>
-    </div>
 
-    <div class="stats-grid simple">
-        <div class="stat-card" onclick="irParaFinanceiro()">
-            <div class="stat-label">Lucro do mês</div>
-            <div class="stat-value positive" id="weekRevenue">R$ 0</div>
+            <div class="recent-services">
+                <div class="section-header">
+                    <h3>Últimos Serviços</h3>
+                    <a href="#" onclick="verTodosServicos()" class="btn-link">Ver todos</a>
+                </div>
+                <div id="recentServicesList"></div>
+            </div>
         </div>
-
-        <div class="stat-card" onclick="irParaServicos()">
-            <div class="stat-label">Serviços</div>
-            <div class="stat-value" id="weekExpenses">0</div>
-        </div>
-
-        <div class="stat-card" onclick="irParaClientes()">
-            <div class="stat-label">Clientes</div>
-            <div class="stat-value positive" id="weekProfit">0</div>
-        </div>
-    </div>
-
-    <div class="recent-services">
-        <div class="section-header">
-            <h3>Últimos Serviços</h3>
-            <a href="#" onclick="verTodosServicos()" class="btn-link">Ver todos</a>
-        </div>
-        <div id="recentServicesList"></div>
-    </div>
-</div>
 
         <!-- TELA SERVIÇOS -->
         <div id="servicesScreen" class="screen">
             <div class="services-list">
+                <div class="service-actions">
+                    <button class="btn-service-main" onclick="abrirNovoServico()">
+                        <i class="fas fa-plus-circle"></i> Novo Serviço
+                    </button>
+
+                    <button class="btn-service-return" onclick="abrirRetorno()">
+                        <i class="fas fa-rotate-left"></i> Adicionar Retorno
+                    </button>
+                </div>
+
                 <div class="search-box">
                     <input type="text" id="searchInput" class="form-control" placeholder="🔍 Buscar por nome do cliente...">
                 </div>
+
                 <div id="allServicesList"></div>
             </div>
         </div>
@@ -87,67 +109,73 @@
         <div id="clientesScreen" class="screen">
             <div class="clientes-container">
                 <input type="text" id="searchClienteInput" class="form-control mb-3" placeholder="🔍 Buscar cliente por nome ou telefone...">
+
                 <button class="btn-add-cliente" onclick="abrirFormCliente()">
                     <i class="fas fa-user-plus"></i> Novo Cliente
                 </button>
+
                 <div id="clientesList" class="clientes-list"></div>
             </div>
-
-            
         </div>
 
         <!-- TELA NOVO SERVIÇO -->
         <div id="newServiceScreen" class="screen">
             <div class="form-container">
                 <h3 class="mb-3 text-center">Novo Serviço</h3>
+
                 <form id="serviceForm">
-                    <!-- Seleção de cliente existente -->
-<div class="mb-3">
-    <label class="form-label">Selecionar Cliente Existente</label>
-    <div style="display: flex; gap: 8px;">
-        <select id="selectCliente" class="form-control" style="flex: 1;">
-            <option value="">-- Selecione um cliente --</option>
-        </select>
-        <button type="button" class="btn btn-outline-primary" onclick="carregarClienteSelecionado()" style="white-space: nowrap;">
-            <i class="fas fa-user-check"></i> Carregar
-        </button>
-    </div>
-    <small class="text-muted">Ou preencha os campos abaixo para um novo cliente</small>
-</div> 
+                    <div class="mb-3">
+                        <label class="form-label">Selecionar Cliente Existente</label>
+                        <div style="display: flex; gap: 8px;">
+                            <select id="selectCliente" class="form-control" style="flex: 1;">
+                                <option value="">-- Selecione um cliente --</option>
+                            </select>
+                            <button type="button" class="btn btn-outline-primary" onclick="carregarClienteSelecionado()" style="white-space: nowrap;">
+                                <i class="fas fa-user-check"></i> Carregar
+                            </button>
+                        </div>
+                        <small class="text-muted">Ou preencha os campos abaixo para um novo cliente</small>
+                    </div>
+
                     <div id="clienteFields">
-                    <div class="mb-3">
-                        <label class="form-label">Nome do Cliente</label>
-                        <input type="text" id="clientName" class="form-control" required>
+                        <div class="mb-3">
+                            <label class="form-label">Nome do Cliente</label>
+                            <input type="text" id="clientName" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Telefone</label>
+                            <input type="tel" id="phone" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Endereço</label>
+                            <input type="text" id="address" class="form-control" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Telefone</label>
-                        <input type="tel" id="phone" class="form-control" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Endereço</label>
-                        <input type="text" id="address" class="form-control" required>
-                    </div>
-                    </div>
+
                     <div class="mb-3">
                         <label class="form-label">Descrição do Serviço</label>
                         <textarea id="problemDesc" class="form-control" rows="3" required></textarea>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">Valor Cobrado (R$)</label>
                         <input type="number" id="amount" class="form-control" step="0.01" required>
                     </div>
+
                     <div class="mb-3">
                         <label class="form-label">Data do Serviço</label>
                         <input type="date" id="serviceDate" class="form-control" required>
                     </div>
 
-                    <!-- Status -->
                     <div class="mb-3">
                         <label class="form-label">Status</label>
                         <div class="status-buttons">
                             <button type="button" class="status-option pendente" id="statusPendente" onclick="setStatus('Pendente')">
                                 <i class="fas fa-clock"></i> Pendente
                             </button>
+
                             <button type="button" class="status-option concluido" id="statusConcluido" onclick="setStatus('Completo')">
                                 <i class="fas fa-check-circle"></i> Concluído
                             </button>
@@ -155,7 +183,6 @@
                         <input type="hidden" id="status" value="Pendente">
                     </div>
 
-                    <!-- Garantia -->
                     <div class="warranty-row">
                         <span class="warranty-label">Tem garantia?</span>
                         <label class="switch">
@@ -165,7 +192,6 @@
                         <input type="date" id="warrantyEnd" class="form-control warranty-date">
                     </div>
 
-                    <!-- Gastos -->
                     <div class="expense-row">
                         <span class="expense-label">Teve gastos?</span>
                         <label class="switch">
@@ -173,12 +199,13 @@
                             <span class="slider"></span>
                         </label>
                     </div>
+
                     <div id="expenseContainer" class="expense-container"></div>
+
                     <button type="button" id="addExpenseBtn" class="btn-add-expense" onclick="addExpense()">
                         + Adicionar gasto
                     </button>
 
-                    <!-- Foto -->
                     <div class="mb-3">
                         <label class="form-label">Foto do Serviço</label>
                         <div class="photo-upload-area" onclick="document.getElementById('servicePhoto').click()">
@@ -186,7 +213,9 @@
                             <p>Tirar foto ou selecionar imagem</p>
                             <small>Clique para adicionar foto</small>
                         </div>
+
                         <input type="file" id="servicePhoto" accept="image/*" capture="environment" style="display:none" onchange="previewPhoto(this)">
+
                         <div id="photoPreview" style="display:none; margin-top: 10px;">
                             <img id="photoPreviewImg" style="width: 100%; border-radius: 10px;">
                             <button type="button" class="btn btn-sm btn-danger mt-2" onclick="removerFoto()">Remover foto</button>
@@ -199,72 +228,74 @@
             </div>
         </div>
 
- <!-- TELA FINANCEIRO - VERSÃO SIMPLIFICADA -->
-<div id="financialScreen" class="screen">
-    <div class="finance-wrapper simple-finance">
-        <h3 class="finance-title">Financeiro</h3>
-        <p class="finance-subtitle">Resumo simples dos ganhos</p>
+        <!-- TELA FINANCEIRO -->
+        <div id="financialScreen" class="screen">
+            <div class="finance-wrapper simple-finance">
+                <h3 class="finance-title">Financeiro</h3>
+                <p class="finance-subtitle">Resumo simples dos ganhos</p>
 
-        <div class="big-profit-card">
-            <span>Lucro líquido</span>
-            <strong id="financeProfit">R$ 0,00</strong>
-        </div>
+                <div class="big-profit-card">
+                    <span>Lucro líquido</span>
+                    <strong id="financeProfit">R$ 0,00</strong>
+                </div>
 
-        <div class="money-row">
-            <div>
-                <span>Faturamento</span>
-                <strong id="financeRevenue">R$ 0,00</strong>
+                <div class="money-row">
+                    <div>
+                        <span>Faturamento</span>
+                        <strong id="financeRevenue">R$ 0,00</strong>
+                    </div>
+                    <div>
+                        <span>Gastos</span>
+                        <strong id="financeExpenses">R$ 0,00</strong>
+                    </div>
+                </div>
+
+                <div class="period-buttons simple-period">
+                    <button class="period-btn-modern" data-period="daily">Hoje</button>
+                    <button class="period-btn-modern" data-period="weekly">Semana</button>
+                    <button class="period-btn-modern" data-period="monthly">Mês</button>
+                    <button class="period-btn-modern" data-period="yearly">Ano</button>
+                </div>
+
+                <div id="financialDetails" class="financial-details-modern"></div>
+                <div id="listaFaturamentoContainer" class="lista-faturamento-container"></div>
             </div>
-            <div>
-                <span>Gastos</span>
-                <strong id="financeExpenses">R$ 0,00</strong>
+        </div>
+
+    </div>
+
+    <!-- NAVEGAÇÃO INFERIOR -->
+    <div class="bottom-nav">
+        <div class="nav-item" data-screen="home">
+            <i class="fas fa-home"></i>
+            <span>Início</span>
+        </div>
+
+        <div class="nav-item" data-screen="clientes">
+            <i class="fas fa-users"></i>
+            <span>Clientes</span>
+        </div>
+
+        <div class="nav-item nav-item-new" data-screen="new">
+            <div class="new-button-wrapper">
+                <i class="fas fa-plus-circle"></i>
             </div>
+            <span>Novo</span>
         </div>
 
-        <div class="period-buttons simple-period">
-            <button class="period-btn-modern" data-period="daily">Hoje</button>
-            <button class="period-btn-modern" data-period="weekly">Semana</button>
-            <button class="period-btn-modern" data-period="monthly">Mês</button>
-            <button class="period-btn-modern" data-period="yearly">Ano</button>
+        <div class="nav-item" data-screen="services">
+            <i class="fas fa-list"></i>
+            <span>Serviços</span>
         </div>
 
-        <div id="financialDetails" class="financial-details-modern"></div>
-
-        <div id="listaFaturamentoContainer" class="lista-faturamento-container"></div>
-    </div>
-</div>
-
-    <!-- Navegação Inferior -->
-<div class="bottom-nav">
-    <div class="nav-item" data-screen="home">
-        <i class="fas fa-home"></i>
-        <span>Início</span>
-    </div>
-    <div class="nav-item" data-screen="clientes">
-        <i class="fas fa-users"></i>
-        <span>Clientes</span>
-    </div>
-    
-    <!-- Botão Novo destacado no centro -->
-    <div class="nav-item nav-item-new" data-screen="new">
-        <div class="new-button-wrapper">
-            <i class="fas fa-plus-circle"></i>
+        <div class="nav-item" data-screen="financial">
+            <i class="fas fa-chart-line"></i>
+            <span>Financeiro</span>
         </div>
-        <span>Novo</span>
     </div>
-    
-    <div class="nav-item" data-screen="services">
-        <i class="fas fa-list"></i>
-        <span>Serviços</span>
-    </div>
-    <div class="nav-item" data-screen="financial">
-        <i class="fas fa-chart-line"></i>
-        <span>Financeiro</span>
-    </div>
-</div>
 
-    <!-- Modais -->
-   <div class="modal fade" id="serviceModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+    <!-- MODAIS -->
+    <div class="modal fade" id="serviceModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
@@ -283,21 +314,26 @@
                     <h5 class="modal-title" id="clienteModalTitle">Novo Cliente</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
+
                 <div class="modal-body">
                     <form id="clienteForm">
                         <input type="hidden" id="clienteId">
+
                         <div class="mb-3">
                             <label class="form-label">Nome</label>
                             <input type="text" id="clienteNome" class="form-control" required>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Telefone</label>
                             <input type="tel" id="clienteTelefone" class="form-control" required>
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Endereço</label>
                             <input type="text" id="clienteEndereco" class="form-control" required>
                         </div>
+
                         <button type="submit" class="btn btn-primary w-100">Salvar Cliente</button>
                     </form>
                 </div>
@@ -305,7 +341,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="clienteDetalhesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+      <div class="modal fade" id="clienteDetalhesModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -317,7 +353,76 @@
         </div>
     </div>
 
+    <div class="modal fade" id="retornoClienteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Escolha o Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="retornoClienteBody"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="retornoServicoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Escolha o Serviço</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="retornoServicoBody"></div>
+        </div>
+    </div>
+</div>
+
+    <!-- MODAL RETORNO -->
+    <div class="modal fade" id="retornoModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Retorno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="retornoForm">
+                        <input type="hidden" id="retornoServiceId">
+
+                        <div class="mb-3">
+                            <label class="form-label">Motivo do retorno</label>
+                            <textarea id="retornoMotivo" class="form-control" rows="3" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">O que foi feito?</label>
+                            <textarea id="retornoSolucao" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Gasto no retorno (R$)</label>
+                            <input type="number" id="retornoValorGasto" class="form-control" step="0.01" value="0">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Data do retorno</label>
+                            <input type="date" id="retornoData" class="form-control" required>
+                        </div>
+
+                        <button type="button" class="btn btn-primary w-100" onclick="salvarRetorno()">
+    Salvar Retorno
+</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+```
